@@ -1,9 +1,11 @@
 package dev.amaral.agendaconsole;
 
+import java.beans.Statement;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class App {
@@ -16,7 +18,7 @@ public class App {
 		private static final String WARNING = "Warning";
 		private static final String CONSUCESSFULL = "Connection is sucefull with";
 		
-	}
+	}//msg
 	
 
 	public static void main(String[] args) {
@@ -38,7 +40,7 @@ public class App {
 		contact1.report();
 		insert(contact1);
 		
-	}
+	}// main
 	public static void insert(Contact contact) {
 		
 		StringBuffer sql = new StringBuffer();
@@ -71,8 +73,7 @@ public class App {
 			e.printStackTrace();
 		}
 		
-		
-	}
+	}//method insert
 	public static Connection getConection() {
 		try {
 			Class.forName(NAMECLASS);
@@ -88,8 +89,59 @@ public class App {
 			e.printStackTrace();
 		}
 		return null;
+	}//method	
+
+
+	public static void consult() {
+		StringBuffer sql = new StringBuffer();
 		
-	}
+		sql.append("select * from telephonebook"); 		
+		
+		String query = sql.toString();
+		
+		Connection conn = getConection();
+		
+		Statement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			stmt = (Statement) conn.createStatement();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			rs= ((java.sql.Statement) stmt).executeQuery(query);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {		      
+		      while (rs.next()) {
+		        int id = rs.getInt("Id");
+		        String name = rs.getString("Name");
+		        String lastName = rs.getString("LastName");
+		        String adress = rs.getString("Adress");
+		        Date birthDate = rs.getDate("BirthDate");
+		        Date modificationDate = rs.getDate("ModificationDate");
+		        String phone = rs.getString("phone");
+		        String cellPhone = rs.getString("cellPhone");
+		        String gender = rs.getString("Gender");
+		        
+		        
+		        System.out.println(id + ", "+name + ", " + lastName + ", " + adress + ", " + birthDate+
+		                           ", " + modificationDate + ", " + phone+ ", " + cellPhone +
+		                           ", " + gender                           
+		                           );
+		      }//while
+		      
+		      }catch (SQLException e) {
+		    	// TODO Auto-generated catch block
+					e.printStackTrace();
+		      }//catch
+	}// method
+}// class	     
 	
 
-}
+
